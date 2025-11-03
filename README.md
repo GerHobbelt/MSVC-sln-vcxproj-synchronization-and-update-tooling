@@ -14,8 +14,26 @@ Requires:
 These scripts are personalized, expect to run on a `SUBST`ed[^subst] `Z:\` drive, which points to local NTFS storage. The `developer-utility-commands` are expected to reside in `Z:\tools\` a.k.a. `/z/tools/` in `bash`-speak on Windows.
 
 
-[^subst]: I use a SUBST-ed drive so I can set up the same dev environment on various machines; none of those have a `Z:` drive before I touch them, thus far, so that makes life easier. ... What would have made life *neater* would have been an NTFS Junction `Z` instead of this DOS-like old skool `SUBST` approach but two things have been learned from experience: (a) git, MSVC and the rest of the scripts sometimes barf a fatal hairball when going through a NTFS Junction-ed path; don't ask me why, as those were very machine and platform version/revision specific issues, which `SUBST` never had, oddly enough; (b) as you will have learned elsewhere, **never run your development environment, nor your source tree, from a "networked drive", wether it is Linux/Samba based or from a 'neat' Windows Server and properly administrated Windows Active Directory Network: you'll die... or your build runs will, anyway. Local disk, some sort of SSD/NVMe preferably, and SUBST-ed. And, yes, the drive wear will be noticable after a while, if you run very large projects with a zillion files. So be it.
+[^subst]: I use a SUBST-ed drive so I can set up the same dev environment on various machines; none of those have a `Z:` drive before I touch them, thus far, so that makes life easier. ... What would have made life *neater* would have been an NTFS Junction `Z` instead of this DOS-like old skool `SUBST` approach but two things have been learned from experience: (a) git, MSVC and the rest of the scripts sometimes barf a fatal hairball when going through a NTFS Junction-ed path; don't ask me why, as those were very machine and platform version/revision specific issues, which `SUBST` never had, oddly enough; a neat `net use` shared drive also didn't fly as one might expect, so `SUBST` it is, forever... (b) as you will have learned elsewhere, **never run your development environment, nor your source tree, from a "networked drive"**, wether it is Linux/Samba based or from a 'neat' Windows Server and properly administrated Windows Active Directory Network: you'll die... or your IDE, scripts and compile/link/build runs will, anyway. Local disk, some sort of SSD/NVMe preferably, and SUBST-ed. And, yes, the drive wear will be noticable after a while, if you run very large projects with a zillion files. *So be it.*
 
+Incidentally, this is the `bash` *alias* list as I keep in my `~/.profile`:
+
+```
+echo "map virtual drive to development base dir (may produce an error...): "
+#subst 'Z:'  'I:\Projects\.........ov\80'
+subst 'Z:'  'I:\Z'
+# net use 'Z:'  '\\localhost\I$\Projects\.........ov\80'
+# ^^^^^^^^^ the 'net use' based drive mapping causes fsync fatal errors in git-for-windows!
+#
+# net use
+
+alias gpp='/z/tools/git_pull_push.sh'
+alias ll='ls -l'
+alias ls='ls -F --color=auto --show-control-chars'
+alias node='winpty node.exe'
+alias npp='/c/Program\ Files/Notepad++/notepad++.exe'
+alias winget='winpty winget.exe'
+```
 
 ## Which of these does what exactly...?
 
